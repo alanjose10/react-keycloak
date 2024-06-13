@@ -3,7 +3,7 @@ import UserService from "../services/auth-service";
 import NotAllowed from "./NotAllowed";
 
 const RenderOnRole = ({ roles, showNotAllowed, children }) => (
-    UserService.hasRole(roles)) ? children : showNotAllowed ? <NotAllowed /> : null;
+    UserService.hasAnyClientRole(roles)) ? children : showNotAllowed ? <NotAllowed /> : null;
 
 RenderOnRole.propTypes = {
     roles: PropTypes.arrayOf(PropTypes.string).isRequired,

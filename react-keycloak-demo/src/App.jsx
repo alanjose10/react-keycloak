@@ -1,10 +1,8 @@
-
-import './App.css'
-
 import RenderOnRole from './components/RenderOnRole'
 import RenderOnAllRole from './components/RenderOnAllRole'
 
 import UserService from './services/auth-service'
+import Customers from './features/products/components/customers'
 
 function App() {
 
@@ -17,29 +15,32 @@ function App() {
     
       <button onClick={UserService.doLogout}>Logout</button>
 
-      <RenderOnRole roles={['write']}>
+      <RenderOnRole roles={['feature-a']}>
         <div>
-          <h4>Write role content</h4>
+          <h4>This will be shown only if user has access to feature a</h4>
         </div>
       </RenderOnRole>
 
-      <RenderOnRole roles={['read']}>
+      <RenderOnRole roles={['feature-b']}>
         <div>
-          <h4>Read role content</h4>
+          <h4>This will be shown only if user has access to feature b</h4>
         </div>
       </RenderOnRole>
 
-      <RenderOnRole roles={['read', 'test']}>
+      <RenderOnRole roles={['feature-a', 'feature-b']}>
         <div>
-          <h4>Read or Read role content</h4>
+          <h4>This will be shown only if user has access to feature a OR b</h4>
         </div>
       </RenderOnRole>
 
-      <RenderOnAllRole roles={['write', 'read']}>
+      <RenderOnAllRole roles={['feature-a', 'feature-b']}>
         <div>
-          <h4>Read and Write role content</h4>
+          <h4>This will be shown only if user has access to feature a AND b</h4>
         </div>
       </RenderOnAllRole>
+
+
+      <Customers></Customers>
     </>
   )
 }

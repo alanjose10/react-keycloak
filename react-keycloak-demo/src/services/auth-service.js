@@ -18,10 +18,10 @@ const initKeycloak = (onAuthenticatedCallback) => {
     // pkceMethod: 'S256',
   })
     .then((authenticated) => {
+      console.log('ID token parsed')
       console.log(_kc.idTokenParsed)
+      console.log('Access token parsed')
       console.log(_kc.tokenParsed)
-      console.log(_kc.idToken)
-      console.log(_kc.token)
       if (!authenticated) {
         console.log("user is not authenticated..!");
       }
@@ -30,17 +30,16 @@ const initKeycloak = (onAuthenticatedCallback) => {
     .catch(console.error);
 };
 
-const doLogin = _kc.login;
+const isLoggedIn = () => !!_kc.token;
 
+const doLogin = _kc.login;
 const doLogout = _kc.logout;
 
 const getIdToken = () => _kc.idToken;
-
-const getAccessToken = () => _kc.token;
-
 const getIdTokenParsed = () => _kc.idTokenParsed;
 
-const isLoggedIn = () => !!_kc.token;
+const getAccessToken = () => _kc.token;
+const getAccessTokenParsed = () => _kc.tokenParsed;
 
 const updateToken = (successCallback) =>
   _kc.updateToken(5)
@@ -48,12 +47,13 @@ const updateToken = (successCallback) =>
     .catch(doLogin);
 
 const getUsername = () => _kc.idTokenParsed?.preferred_username;
-
 const getUserEmail = () => _kc.idTokenParsed?.email;
 
-const hasRole = (roles) => roles.some((role) => _kc.hasRealmRole(role));
+const hasAnyRealmRole = (roles) => roles.some((role) => _kc.hasRealmRole(role));
+const hasAllRealmRole = (roles) => roles.every((role) => _kc.hasRealmRole(role));
 
-const hasAllRole = (roles) => roles.every((role) => _kc.hasRealmRole(role));
+const hasAnyClientRole = (roles) => roles.some((role) => _kc.hasResourceRole(role, import.meta.env.VITE_KEYCLOAK_CLIENT_ID));
+const hasAllClientRole = (roles) => roles.every((role) => _kc.hasResourceRole(role, import.meta.env.VITE_KEYCLOAK_CLIENT_ID));
 
 const UserService = {
   initKeycloak,
@@ -61,12 +61,16 @@ const UserService = {
   doLogout,
   isLoggedIn,
   getAccessToken,
+  getAccessTokenParsed,
+  getIdToken,
   getIdTokenParsed,
   updateToken,
   getUsername,
   getUserEmail,
-  hasRole,
-  hasAllRole
+  hasAnyRealmRole,
+  hasAllRealmRole,
+  hasAnyClientRole,
+  hasAllClientRole,
 };
 
 export default UserService;
